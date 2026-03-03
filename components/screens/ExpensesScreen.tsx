@@ -112,11 +112,6 @@ export function ExpensesScreen() {
         <View className="flex-row items-center gap-2 mb-3">
           <View
             className="flex-1 flex-row items-center rounded-md px-3"
-            style={{
-              borderWidth: 2,
-              borderColor: '#2C2416',
-              backgroundColor: '#FFFFFF',
-            }}
           >
             <Search size={16} color="#7A6A52" strokeWidth={2} />
             <View className="flex-1">
