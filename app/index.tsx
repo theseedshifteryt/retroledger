@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LayoutDashboard, Wallet, Receipt, Calendar, Target } from 'lucide-react-native';
+import { LayoutDashboard, Wallet, Receipt, Calendar, Target, FileText } from 'lucide-react-native';
 import { DashboardScreen } from '@/components/screens/DashboardScreen';
 import { BudgetScreen } from '@/components/screens/BudgetScreen';
 import { ExpensesScreen } from '@/components/screens/ExpensesScreen';
 import { BillsScreen } from '@/components/screens/BillsScreen';
 import { GoalsScreen } from '@/components/screens/GoalsScreen';
 import { QuickAddButton } from '@/components/QuickAddButton';
+import { ExportDialog } from '@/components/ExportDialog';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -19,6 +20,7 @@ const tabs = [
 
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showExport, setShowExport] = useState(false);
 
   const renderScreen = () => {
     switch (activeTab) {
@@ -59,9 +61,23 @@ export default function HomeScreen() {
             RetroLedger
           </Text>
         </View>
-        <Text style={{ fontFamily: 'SpaceGrotesk_500Medium', fontSize: 13, color: 'rgba(255,255,255,0.9)' }}>
-          {currentTab?.label}
-        </Text>
+        <View className="flex-row items-center gap-2">
+          <Pressable
+            onPress={() => setShowExport(true)}
+            className="w-7 h-7 rounded-md items-center justify-center"
+            style={({ pressed }) => ({
+              backgroundColor: pressed ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)',
+              borderWidth: 1.5,
+              borderColor: 'rgba(255,255,255,0.5)',
+              transform: [{ scale: pressed ? 0.92 : 1 }],
+            })}
+          >
+            <FileText size={14} color="white" strokeWidth={2} />
+          </Pressable>
+          <Text style={{ fontFamily: 'SpaceGrotesk_500Medium', fontSize: 13, color: 'rgba(255,255,255,0.9)' }}>
+            {currentTab?.label}
+          </Text>
+        </View>
       </View>
 
       {/* Screen Content */}
@@ -71,6 +87,9 @@ export default function HomeScreen() {
 
       {/* Quick Add FAB */}
       <QuickAddButton />
+
+      {/* Export Dialog */}
+      <ExportDialog visible={showExport} onClose={() => setShowExport(false)} />
 
       {/* Bottom Tab Bar - Taskbar Style */}
       <View
