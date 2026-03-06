@@ -98,6 +98,7 @@ const initialState: AppState = {
     currency: '$',
     monthlyIncome: 4500,
     onboardingComplete: true,
+    numberFormat: 'us',
   },
   expenses: defaultExpenses,
   categories: defaultCategories,

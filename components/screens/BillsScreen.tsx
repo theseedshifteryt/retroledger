@@ -6,6 +6,7 @@ import { DialogPopup } from '@/components/ui/DialogPopup';
 import { RetroInput } from '@/components/ui/RetroInput';
 import { RetroDropdown } from '@/components/ui/RetroDropdown';
 import { useAppContext } from '@/lib/store';
+import { formatCurrency } from '@/lib/formatNumber';
 import { ChevronLeft, ChevronRight, AlertTriangle, Check } from 'lucide-react-native';
 
 const DAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -13,6 +14,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 
 export function BillsScreen() {
   const { bills, addBill, toggleBillPaid, profile } = useAppContext();
+  const fmt = profile.numberFormat;
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -92,7 +94,7 @@ export function BillsScreen() {
         <View className="flex-1">
           <WindowCard title="💳 Due" titleColor="#E8A0BF">
             <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 20, color: '#E8A0BF' }}>
-              {profile.currency}{totalDue.toFixed(0)}
+              {formatCurrency(totalDue, profile.currency, fmt, 0)}
             </Text>
             <Text style={{ fontFamily: 'SpaceGrotesk_400Regular', fontSize: 11, color: '#7A6A52' }}>
               Unpaid bills
@@ -102,7 +104,7 @@ export function BillsScreen() {
         <View className="flex-1">
           <WindowCard title="✅ Paid" titleColor="#A8D5BA">
             <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 20, color: '#A8D5BA' }}>
-              {profile.currency}{totalPaid.toFixed(0)}
+              {formatCurrency(totalPaid, profile.currency, fmt, 0)}
             </Text>
             <Text style={{ fontFamily: 'SpaceGrotesk_400Regular', fontSize: 11, color: '#7A6A52' }}>
               Completed
@@ -242,7 +244,7 @@ export function BillsScreen() {
               </View>
 
               <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 15, color: bill.paid ? '#A8D5BA' : '#2C2416' }}>
-                {profile.currency}{bill.amount.toFixed(2)}
+                {formatCurrency(bill.amount, profile.currency, fmt)}
               </Text>
             </View>
           );

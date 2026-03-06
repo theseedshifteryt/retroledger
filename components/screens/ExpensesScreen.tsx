@@ -7,10 +7,12 @@ import { DialogPopup } from '@/components/ui/DialogPopup';
 import { RetroDropdown } from '@/components/ui/RetroDropdown';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { useAppContext } from '@/lib/store';
+import { formatCurrency } from '@/lib/formatNumber';
 import { Search, Trash2, Edit2 } from 'lucide-react-native';
 
 export function ExpensesScreen() {
   const { expenses, categories, addExpense, deleteExpense, profile } = useAppContext();
+  const fmt = profile.numberFormat;
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('All');
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -192,7 +194,7 @@ export function ExpensesScreen() {
                 {cat.name}
               </Text>
               <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 11, color: '#7A6A52' }}>
-                {profile.currency}{cat.amount.toFixed(0)}
+                {formatCurrency(cat.amount, profile.currency, fmt, 0)}
               </Text>
             </View>
           ))}
@@ -245,7 +247,7 @@ export function ExpensesScreen() {
                   </Text>
                 </View>
                 <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 15, color: '#2C2416', marginRight: 8 }}>
-                  -{profile.currency}{expense.amount.toFixed(2)}
+                  -{formatCurrency(expense.amount, profile.currency, fmt)}
                 </Text>
                 <Pressable
                   onPress={() => deleteExpense(expense.id)}

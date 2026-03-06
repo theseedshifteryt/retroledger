@@ -9,6 +9,7 @@ import { RetroInput } from '@/components/ui/RetroInput';
 import { RetroDropdown } from '@/components/ui/RetroDropdown';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { useAppContext } from '@/lib/store';
+import { formatCurrency } from '@/lib/formatNumber';
 import { AlertTriangle } from 'lucide-react-native';
 
 const categoryColors = ['#E8A87C', '#C9B8E8', '#A8D5BA', '#E8A0BF'];
@@ -16,6 +17,7 @@ const categoryIcons = ['utensils', 'home', 'car', 'zap', 'music', 'shopping-bag'
 
 export function BudgetScreen() {
   const { categories, addCategory, profile } = useAppContext();
+  const fmt = profile.numberFormat;
   const [activeTab, setActiveTab] = useState('Monthly');
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newCatName, setNewCatName] = useState('');
@@ -62,7 +64,7 @@ export function BudgetScreen() {
             {activeTab} Overview
           </Text>
           <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 13, color: '#2C2416' }}>
-            {profile.currency}{(totalSpent / divisor).toFixed(0)} / {profile.currency}{(totalBudget / divisor).toFixed(0)}
+            {formatCurrency(totalSpent / divisor, profile.currency, fmt, 0)} / {formatCurrency(totalBudget / divisor, profile.currency, fmt, 0)}
           </Text>
         </View>
         <SegmentedProgressBar
@@ -71,7 +73,7 @@ export function BudgetScreen() {
           height={20}
         />
         <Text style={{ fontFamily: 'SpaceGrotesk_400Regular', fontSize: 12, color: '#7A6A52', marginTop: 8 }}>
-          {profile.currency}{((totalBudget - totalSpent) / divisor).toFixed(0)} remaining this {activeTab === 'Monthly' ? 'month' : 'week'}
+          {formatCurrency((totalBudget - totalSpent) / divisor, profile.currency, fmt, 0)} remaining this {activeTab === 'Monthly' ? 'month' : 'week'}
         </Text>
       </WindowCard>
 
@@ -114,10 +116,10 @@ export function BudgetScreen() {
                 </View>
                 <View>
                   <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 16, color: '#2C2416' }}>
-                    {profile.currency}{spent.toFixed(0)}
+                    {formatCurrency(spent, profile.currency, fmt, 0)}
                   </Text>
                   <Text style={{ fontFamily: 'SpaceGrotesk_400Regular', fontSize: 11, color: '#7A6A52' }}>
-                    spent of {profile.currency}{limit.toFixed(0)}
+                    spent of {formatCurrency(limit, profile.currency, fmt, 0)}
                   </Text>
                 </View>
               </View>

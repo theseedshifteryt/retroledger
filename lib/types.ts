@@ -43,9 +43,12 @@ export interface Contribution {
   date: string;
 }
 
+export type NumberFormatType = 'us' | 'eu' | 'space';
+
 export interface UserProfile {
   name: string;
   currency: string;
   monthlyIncome: number;
   onboardingComplete: boolean;
+  numberFormat: NumberFormatType;
 }

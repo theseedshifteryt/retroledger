@@ -3,10 +3,12 @@ import { View, Text, ScrollView } from 'react-native';
 import { WindowCard } from '@/components/ui/WindowCard';
 import { SegmentedProgressBar } from '@/components/ui/SegmentedProgressBar';
 import { useAppContext } from '@/lib/store';
+import { formatCurrency, formatNumber } from '@/lib/formatNumber';
 import { TrendingUp, TrendingDown, DollarSign, Receipt } from 'lucide-react-native';
 
 export function DashboardScreen() {
   const { profile, categories, expenses, bills } = useAppContext();
+  const fmt = profile.numberFormat;
 
   const totalSpent = categories.reduce((sum, c) => sum + c.spent, 0);
   const totalBudget = categories.reduce((sum, c) => sum + c.limit, 0);
@@ -50,7 +52,7 @@ export function DashboardScreen() {
                   color: '#2C2416',
                 }}
               >
-                {profile.currency}{profile.monthlyIncome.toLocaleString()}
+                {formatCurrency(profile.monthlyIncome, profile.currency, fmt, 0)}
               </Text>
             </View>
             <Text
@@ -76,7 +78,7 @@ export function DashboardScreen() {
                   color: '#2C2416',
                 }}
               >
-                {profile.currency}{totalSpent.toLocaleString()}
+                {formatCurrency(totalSpent, profile.currency, fmt, 0)}
               </Text>
             </View>
             <Text
@@ -105,7 +107,7 @@ export function DashboardScreen() {
                 color: remaining >= 0 ? '#2C2416' : '#E8A0BF',
               }}
             >
-              {profile.currency}{Math.abs(remaining).toLocaleString()}
+               {formatCurrency(Math.abs(remaining), profile.currency, fmt, 0)}
             </Text>
           </View>
           <View
@@ -148,7 +150,7 @@ export function DashboardScreen() {
               color: '#2C2416',
             }}
           >
-            {profile.currency}{totalSpent.toLocaleString()} / {profile.currency}{totalBudget.toLocaleString()}
+            {formatCurrency(totalSpent, profile.currency, fmt, 0)} / {formatCurrency(totalBudget, profile.currency, fmt, 0)}
           </Text>
         </View>
         <SegmentedProgressBar progress={budgetHealth} segments={12} height={20} />
@@ -170,7 +172,7 @@ export function DashboardScreen() {
                     marginBottom: 4,
                   }}
                 >
-                  ${d.value}
+                  {formatCurrency(d.value, profile.currency, fmt, 0)}
                 </Text>
                 <View
                   className="w-6 rounded-t-md"
@@ -256,7 +258,7 @@ export function DashboardScreen() {
                     color: '#2C2416',
                   }}
                 >
-                  ${bill.amount}
+                  {formatCurrency(bill.amount, profile.currency, fmt)}
                 </Text>
               </View>
             );

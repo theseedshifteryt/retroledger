@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LayoutDashboard, Wallet, Receipt, Calendar, Target, FileText } from 'lucide-react-native';
+import { LayoutDashboard, Wallet, Receipt, Calendar, Target, Menu, FileText } from 'lucide-react-native';
 import { DashboardScreen } from '@/components/screens/DashboardScreen';
 import { BudgetScreen } from '@/components/screens/BudgetScreen';
 import { ExpensesScreen } from '@/components/screens/ExpensesScreen';
@@ -9,6 +9,7 @@ import { BillsScreen } from '@/components/screens/BillsScreen';
 import { GoalsScreen } from '@/components/screens/GoalsScreen';
 import { QuickAddButton } from '@/components/QuickAddButton';
 import { ExportDialog } from '@/components/ExportDialog';
+import { SidebarMenu } from '@/components/SidebarMenu';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -21,6 +22,7 @@ const tabs = [
 export default function HomeScreen() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [showExport, setShowExport] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const renderScreen = () => {
     switch (activeTab) {
@@ -47,16 +49,19 @@ export default function HomeScreen() {
         }}
       >
         <View className="flex-row items-center gap-2">
-          <View
+          {/* Hamburger Menu Button */}
+          <Pressable
+            onPress={() => setShowSidebar(true)}
             className="w-7 h-7 rounded-md items-center justify-center"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.3)',
+            style={({ pressed }) => ({
+              backgroundColor: pressed ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.3)',
               borderWidth: 1.5,
               borderColor: 'rgba(255,255,255,0.5)',
-            }}
+              transform: [{ scale: pressed ? 0.92 : 1 }],
+            })}
           >
-            <Text style={{ fontSize: 14 }}>💰</Text>
-          </View>
+            <Menu size={16} color="white" strokeWidth={2.5} />
+          </Pressable>
           <Text style={{ fontFamily: 'Syne_800ExtraBold', fontSize: 18, color: '#FFFFFF' }}>
             RetroLedger
           </Text>
@@ -90,6 +95,9 @@ export default function HomeScreen() {
 
       {/* Export Dialog */}
       <ExportDialog visible={showExport} onClose={() => setShowExport(false)} />
+
+      {/* Sidebar Menu */}
+      <SidebarMenu visible={showSidebar} onClose={() => setShowSidebar(false)} />
 
       {/* Bottom Tab Bar - Taskbar Style */}
       <View

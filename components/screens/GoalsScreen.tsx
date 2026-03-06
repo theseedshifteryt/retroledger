@@ -8,6 +8,7 @@ import { DialogPopup } from '@/components/ui/DialogPopup';
 import { RetroInput } from '@/components/ui/RetroInput';
 import { RetroDropdown } from '@/components/ui/RetroDropdown';
 import { useAppContext } from '@/lib/store';
+import { formatCurrency } from '@/lib/formatNumber';
 import { Star, Target, Trophy, Award } from 'lucide-react-native';
 
 const milestoneIcons: Record<number, { icon: typeof Star; label: string }> = {
@@ -19,6 +20,7 @@ const milestoneIcons: Record<number, { icon: typeof Star; label: string }> = {
 
 export function GoalsScreen() {
   const { goals, addGoal, addContribution, profile } = useAppContext();
+  const fmt = profile.numberFormat;
   const [activeTab, setActiveTab] = useState('Short-term');
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [showContribution, setShowContribution] = useState<string | null>(null);
@@ -76,10 +78,10 @@ export function GoalsScreen() {
         </View>
         <View className="flex-row items-baseline gap-1 mb-3">
           <Text style={{ fontFamily: 'JetBrainsMono_500Medium', fontSize: 28, color: '#2C2416' }}>
-            {profile.currency}{totalSaved.toLocaleString()}
+            {formatCurrency(totalSaved, profile.currency, fmt, 0)}
           </Text>
           <Text style={{ fontFamily: 'SpaceGrotesk_400Regular', fontSize: 14, color: '#7A6A52' }}>
-            / {profile.currency}{totalTarget.toLocaleString()}
+            / {formatCurrency(totalTarget, profile.currency, fmt, 0)}
           </Text>
         </View>
         <SegmentedProgressBar
